@@ -136,7 +136,7 @@ int main(int argc,char* argv[])
                 int connfd=accept(listenfd,(struct sockaddr*)&client_address,&client_addrlength);
                 addfd(epollfd,connfd,true);
             }
-            else if(events[i].event&EPOLLIN)
+            else if(events[i].events&EPOLLIN)
             {
                 pthread_t thread;
                 fds fds_for_new_worker;
