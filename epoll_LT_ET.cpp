@@ -35,7 +35,7 @@ void addfd(int epollfd,int fd,bool enable_et)
         event.events|=EPOLLET;
     }
     epoll_ctl(epollfd,EPOLL_CTL_ADD,fd,&event);
-    setnonblockig(fd);
+    setnonblocking(fd);
 }
 /*LT模式的工作流程*/
 void lt(epoll_event* events,int number,int epollfd,int listenfd)
@@ -52,7 +52,7 @@ void lt(epoll_event* events,int number,int epollfd,int listenfd)
             &client_addrlength);
             addfd(epollfd,connfd,false);
         }
-        else if(events[i].event&EPOLLIN)
+        else if(events[i].events&EPOLLIN)
         {
             /*只要socket读缓冲中还有未读出的数据，这段代码就被触发*/
             printf("event trigger once\n");
@@ -85,7 +85,7 @@ void et(epoll_event* events,int number,int epollfd,int listenfd)
             int connfd=accept(listenfd,(struct sockaddr*)&client_address,&client_addrlength);
             addfd(epollfd,connfd,true);
         }
-        else if(events[i].event&EPOLLIN)
+        else if(events[i].events&EPOLLIN)
         {
             /*这段代码不会重复触发，所以我们循环读取数据*/
             printf("event trigger once\n");
@@ -111,7 +111,7 @@ void et(epoll_event* events,int number,int epollfd,int listenfd)
                 }
                 else
                 {
-                    printf("get %d bytes of content:%s\n",ret buf);
+                    printf("get %d bytes of content:%s\n",ret ,buf);
                 }
             }
         }

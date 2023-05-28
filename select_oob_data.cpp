@@ -88,7 +88,7 @@ int main(int argc,char* argv[])
             printf("get %d bytes of oob data:%s\n",ret,buf);
         }
     }
-    clsoe(connfd);
+    close(connfd);
     close(listenfd);
     return 0;
 }
