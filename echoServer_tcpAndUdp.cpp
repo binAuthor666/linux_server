@@ -20,7 +20,7 @@ int setnonblocking(int fd)
 {
     int old_option=fcntl(fd,F_GETFL);
     int new_option=old_option|O_NONBLOCK;
-    fcntl(fd,F_SETFL,new_option)；
+    fcntl(fd,F_SETFL,new_option);
     return old_option;
 }
 
@@ -29,7 +29,7 @@ void addfd(int epollfd,int fd)
     epoll_event event;
     event.data.fd=fd;
     event.events=EPOLLIN|EPOLLET;
-    epoll_ctl(epollfd,EPOLLL_CTL_ADD,fd,&event);
+    epoll_ctl(epollfd,EPOLL_CTL_ADD,fd,&event);
     setnonblocking(fd);
 }
 
@@ -62,9 +62,9 @@ int main(int argc,char* argv[])
     /*创建UDPsocket,并将其绑定到端口上*/
     bzero(&address,sizeof(address));
     address.sin_family=AF_INET;
-    inet_pton(AF_INET,ip,&address,sin_addr);
+    inet_pton(AF_INET,ip,&address.sin_addr);
     address.sin_port=htons(port);
-    int udpfd=socket(PF_IENT,SOCK_DGRAM,0);
+    int udpfd=socket(PF_INET,SOCK_DGRAM,0);
     assert(udpfd>=0);
 
     ret=bind(udpfd,(struct sockaddr*)&address,sizeof(address));
@@ -100,13 +100,13 @@ int main(int argc,char* argv[])
             {
                 char buf[UDP_BUFFER_SIZE];
                 memset(buf,'\0',UDP_BUFFER_SIZE);
-                struct sockaddrin client_address;
+                struct sockaddr_in client_address;
                 socklen_t client_addrlength=sizeof(client_address);
 
                 ret=recvfrom(udpfd,buf,UDP_BUFFER_SIZE-1,0,(struct sockaddr*)&client_address,&client_addrlength);
                 if(ret>0)
                 {
-                    sendto(udpfd,buf,UDP_BUFFER_SIZE-1,0,(struct sockaddr*)&client_address,&client_addrlength);
+                    sendto(udpfd,buf,UDP_BUFFER_SIZE-1,0,(struct sockaddr*)&client_address,client_addrlength);
                 }
             }
             else if(events[i].events&EPOLLIN)

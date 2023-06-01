@@ -39,7 +39,7 @@ void sig_handler(int sig)
     int save_errno=errno;
     int msg=sig;
     send(pipefd[1],(char*)&msg,1,0);/*将信号值写入管道，以通知主循环*/
-    errnp=save_errno;
+    errno=save_errno;
 }
 /*设置信号的处理函数*/
 void addsig(int sig)
