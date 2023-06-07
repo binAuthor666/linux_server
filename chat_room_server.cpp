@@ -114,7 +114,7 @@ int main(int argc,char* argv[])
                 char errors[100];
                 memset(errors,'\0',100);
                 socklen_t length=sizeof(errors);
-                int(getsockopt(fds[i].fd,SOL_SOCKET,SO_ERROR,&errors,&length)<0)
+                if(getsockopt(fds[i].fd,SOL_SOCKET,SO_ERROR,&errors,&length)<0)
                 {
                     printf("get socket option failed\n");
                 }
@@ -140,7 +140,7 @@ int main(int argc,char* argv[])
                     if(errno!=EAGAIN)
                     {
                         close(connfd);
-                        users[fds[i].fd]=user[fds[user_counter].fd];
+                        users[fds[i].fd]=users[fds[user_counter].fd];
                         fds[i]=fds[user_counter];
                         i--;
                         user_counter--;
